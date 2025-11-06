@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import Cover from "../cover_UI/Cover.jsx";
 import Layout from "./Layout.jsx";
 import HomePgae from "../Pages/HomePgae.jsx";
@@ -13,7 +13,7 @@ export default function App() {
   };
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <div className="app-shell">
         <div className={`app-home ${introComplete ? "app-home-visible" : ""}`}>
           <Routes>
@@ -24,6 +24,6 @@ export default function App() {
         </div>
         <Cover onStart={handleStart} introComplete={introComplete} />
       </div>
-    </BrowserRouter>
+    </HashRouter>
   );
 }

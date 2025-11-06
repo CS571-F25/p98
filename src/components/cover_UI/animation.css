@@ -1,0 +1,256 @@
+.background {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: opacity 1s ease;
+}
+
+.bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: -2;
+  transition: opacity 1s ease;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: -1;
+  transition: opacity 1s ease;
+}
+
+.content {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: rgb(229, 227, 227);
+  text-align: center;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 1s cubic-bezier(0.25, 1, 0.5, 1),
+    transform 1s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.background.cover-exit {
+  pointer-events: none;
+}
+
+.background.cover-exit .bg,
+.background.cover-exit .overlay {
+  opacity: 0;
+  transition-delay: 0.5s;
+}
+
+.background.cover-exit .bg {
+  transition: opacity 1.5s ease;
+}
+
+.content-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.content-exit {
+  opacity: 0;
+  transform: translateY(-60px);
+}
+
+.content-exit .content-line,
+.content-exit .start-btn,
+.content-exit .serif-text,
+.content-exit .title-highlight,
+.content-exit .quotation {
+  transition-delay: 0s;
+}
+
+/* Typography */
+.content h1,
+.content .title-highlight,
+.welcome-text,
+.intro-text,
+.title,
+.quotation,
+.quotation > span {
+  font-family: "Cormorant Garamond", serif;
+}
+
+.content h1 {
+  font-size: 2rem;
+  letter-spacing: 0.1rem;
+  margin-top: 0rem;
+  margin-bottom: 0rem;
+  font-weight: 400;
+}
+
+.content .title-highlight {
+  font-size: 5rem;
+  letter-spacing: 0.7rem;
+  font-weight: 300;
+}
+
+.serif-text{
+  font-family: "Cormorant Garamond", serif;
+  color: rgb(255, 255, 255);
+}
+
+.welcome-text {
+  font-size: 2.5rem;
+  letter-spacing: 0.1rem;
+  font-weight: 100;
+  margin: 0rem 0;
+}
+
+.intro-text{
+  font-size:1.3rem;
+  letter-spacing: 0.1rem;
+  font-weight:50;
+  margin: 0rem 0.2;
+}
+
+.title {
+  font-size: 1.8rem;
+  letter-spacing: 0.3rem;
+  font-weight: bold;
+  color: white;
+}
+
+.quotation {
+  max-width: 720px;
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  font-style: italic;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.quote-line {
+  display: block;
+  letter-spacing: 0.04rem;
+  text-align: center;
+}
+
+.quotation > span {
+  font-size: 0.95rem;
+  letter-spacing: 0.18rem;
+  text-transform: uppercase;
+  font-style: normal;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+
+/*
+Manage line style here
+*/
+
+.content-line {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 1s cubic-bezier(0.25, 1, 0.5, 1),
+    transform 1s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.content-visible .content-line {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.content-line.delay {
+  transition-delay: 0.15s;
+}
+
+.content-exit .content-line,
+.content-exit .start-btn,
+.content-exit .serif-text,
+.content-exit .title-highlight,
+.content-exit .quotation {
+  opacity: 0;
+  transform: translateY(-30px);
+  transition: opacity 1s cubic-bezier(0.25, 1, 0.5, 1),
+    transform 1s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.delay-intro {
+  transition-delay: 0.25s;
+}
+
+.center-lines {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+  gap: 1.2rem;
+}
+
+.line {
+  width: 1px;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.top-line { height: 60px; }
+.connector-line { height: 50px; }
+.bottom-line { height: 70px; }
+
+.title-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+}
+
+.hline {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.7);
+}
+.main-hline {width: 250px;}
+.short-hline {width: 100px;}
+
+.start-btn{
+  display: inline-flex;   
+  padding: 0.7rem 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  background: transparent;
+  color: inherit;
+  letter-spacing: 0.35rem;
+  font-size: 1rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.start-btn:hover,
+.start-btn:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.95);
+  color: #fff;
+}
+
+.delay-cta {
+  transition-delay: 0.3s;
+}
+
+.delay-quote {
+  transition-delay: 0.1s;
+}

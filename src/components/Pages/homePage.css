@@ -1,0 +1,253 @@
+.home-root {
+  position: relative;
+  width: 100%;
+}
+
+.home-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.home-content {
+  position: relative;
+  z-index: 10;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 5rem 1.5rem;
+}
+
+.home-hero {
+  text-align: center;
+  margin-bottom: 8rem;
+  padding-top: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.home-hero-title {
+  font-size: clamp(3rem, 8vw, 4.5rem);
+  font-weight: 700;
+  margin: 0;
+  background-image: linear-gradient(to bottom, #fff8e7, #8a7e66);
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.home-hero-quote {
+  font-size: 1.25rem;
+  color: #9d8f73;
+  font-style: italic;
+  line-height: 1.8;
+  margin: 0 auto;
+  max-width: 40rem;
+}
+
+.home-scroll-indicator {
+  margin-top: 4rem;
+  display: flex;
+  justify-content: center;
+  opacity: 0.5;
+}
+
+.home-scroll-icon {
+  color: #9d8f73;
+  animation: home-bounce 2s infinite;
+}
+
+.home-section-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8rem;
+}
+
+.home-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+}
+
+.home-section.reverse {
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .home-section {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .home-section.reverse {
+    flex-direction: row-reverse;
+  }
+}
+
+.home-section-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.home-text-mobile-right {
+  text-align: right;
+}
+
+@media (min-width: 768px) {
+  .home-text-mobile-right {
+    text-align: left;
+  }
+}
+
+.home-text-right {
+  text-align: right;
+}
+
+.home-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #cba164;
+  letter-spacing: 0.2rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.home-eyebrow.right {
+  justify-content: flex-end;
+}
+
+.home-eyebrow-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.home-section-heading {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  color: #ffffff;
+  margin: 0;
+  font-weight: 700;
+}
+
+.home-section-body {
+  font-size: 1.25rem;
+  color: #9d8f73;
+  line-height: 1.9;
+  margin: 0;
+}
+
+.home-section-card {
+  flex: 1;
+  position: relative;
+}
+
+.home-section-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--home-card-glow, rgba(203, 161, 100, 0.15));
+  filter: blur(60px);
+  opacity: 0.1;
+  transition: opacity 0.6s ease;
+}
+
+.home-section-card:hover::before {
+  opacity: 0.2;
+}
+
+.home-card {
+  position: relative;
+  border: 1px solid rgba(226, 220, 200, 0.1);
+  background: rgba(26, 24, 20, 0.6);
+  backdrop-filter: blur(12px);
+  padding: 2rem;
+  border-radius: 2px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+  transition: transform 0.4s ease;
+}
+
+.home-section-card:hover .home-card {
+  transform: translateY(-8px);
+}
+
+.home-card.right {
+  text-align: right;
+}
+
+.home-card-title {
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+  color: #e2dcc8;
+}
+
+.home-card-text {
+  font-size: 1.1rem;
+  color: #b5b0a2;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.home-card-gold {
+  --home-card-glow: rgba(203, 161, 100, 0.2);
+}
+
+.home-card-teal {
+  --home-card-glow: rgba(100, 203, 191, 0.15);
+}
+
+.home-card-crimson {
+  --home-card-glow: rgba(203, 100, 100, 0.2);
+}
+
+.animate-fade-in-up {
+  opacity: 0;
+  animation: homepage-fade-in-up 1s ease-out forwards;
+}
+
+.delay-200 {
+  animation-delay: 0.2s;
+}
+
+.delay-500 {
+  animation-delay: 0.5s;
+}
+
+.delay-700 {
+  animation-delay: 0.7s;
+}
+
+.delay-900 {
+  animation-delay: 0.9s;
+}
+
+.animate-bounce {
+  animation: home-bounce 2s infinite;
+}
+
+@keyframes homepage-fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes home-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}

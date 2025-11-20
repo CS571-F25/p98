@@ -3,6 +3,7 @@ import { HashRouter, Route, Routes } from "react-router-dom";
 import Cover from "../cover_UI/Cover.jsx";
 import Layout from "./Layout.jsx";
 import HomePgae from "../Pages/HomePgae.jsx";
+import TranslatePage from "../Pages/TranslatePage.jsx";
 
 export default function App() {
   const [introComplete, setIntroComplete] = useState(false);
@@ -18,6 +19,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<HomePgae />} />
+              <Route path="translate" element={<TranslatePage />} />
             </Route>
           </Routes>
         </div>

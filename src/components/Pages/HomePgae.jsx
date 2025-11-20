@@ -1,11 +1,10 @@
-import { memo } from "react"
-import React, { useEffect, useRef } from 'react';
-import { Cpu, Globe, Feather, ArrowDown } from 'lucide-react';
+import React, { memo, useEffect, useRef } from "react";
+import { Cpu, Globe, Feather, ArrowDown } from "lucide-react";
+import "./homePage.css";
 
 const HomePage = () => {
   const canvasRef = useRef(null);
 
-  // --- 动态背景逻辑移动到这里 ---
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
@@ -17,7 +16,6 @@ const HomePage = () => {
       canvas.height = window.innerHeight;
     };
 
-    // 辅助函数：绘制旋转的多边形
     const drawPolygon = (cx, cy, radius, sides, angle, tilt, color) => {
       ctx.beginPath();
       for (let i = 0; i <= sides; i++) {
@@ -32,7 +30,6 @@ const HomePage = () => {
       ctx.stroke();
     };
 
-    // 1. 绘制双螺旋框架
     const drawTwinHelix = (cx, cy, height, maxRadius, time, color) => {
       ctx.beginPath();
       const turns = 3.5;
@@ -59,7 +56,6 @@ const HomePage = () => {
       ctx.stroke();
     };
 
-    // 2. 绘制内部几何体
     const drawInternalStructures = (cx, cy, time, baseColor, highlightColor) => {
       const height = 550; 
       const leanFactor = 0.4; 
@@ -175,46 +171,42 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div className="relative w-full">
-      {/* Canvas 仅在 HomePage 渲染 */}
-      <canvas ref={canvasRef} className="fixed inset-0 w-full h-full z-0 pointer-events-none" />
+    <div className="home-root">
+      {}
+      <canvas ref={canvasRef} className="home-canvas" />
 
-      <div className="relative z-10 max-w-6xl mx-auto px-6 py-20">
-        
-        {/* 头部 Hero 区域 */}
-        <header className="text-center mb-32 pt-10 animate-fade-in-up delay-200">
-          <h1 className="text-5xl md:text-7xl font-cinzel font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-b from-[#fff8e7] to-[#8a7e66]">
-            THE BABEL
-          </h1>
-          <p className="font-garamond text-xl italic text-[#9d8f73] max-w-2xl mx-auto leading-relaxed">
+      <div className="home-content">
+        {}
+        <header className="home-hero animate-fade-in-up delay-200">
+          <h1 className="home-hero-title font-cinzel">THE BABEL</h1>
+          <p className="home-hero-quote font-garamond">
             "Decoding the language of humanity through the lens of artificial intelligence."
           </p>
           
-          <div className="mt-16 flex justify-center opacity-50 animate-bounce">
-            <ArrowDown size={24} className="text-[#9d8f73]" />
+          <div className="home-scroll-indicator">
+            <ArrowDown size={24} className="home-scroll-icon" />
           </div>
         </header>
 
-        {/* 功能介绍板块 */}
-        <div className="space-y-32">
+        {}
+        <div className="home-section-stack">
           
           {/* Section 1 */}
-          <section className="flex flex-col md:flex-row items-center gap-12 animate-fade-in-up delay-500">
-            <div className="flex-1 space-y-6 text-right md:text-left">
-              <div className="flex items-center gap-3 text-[#cba164] mb-2">
-                <Globe className="w-6 h-6" />
-                <span className="font-cinzel text-sm tracking-widest">THE VISION</span>
+          <section className="home-section animate-fade-in-up delay-500">
+            <div className="home-section-text home-text-mobile-right">
+              <div className="home-eyebrow">
+                <Globe className="home-eyebrow-icon" />
+                <span className="font-cinzel">THE VISION</span>
               </div>
-              <h2 className="text-4xl font-garamond font-bold text-white">Breaking The Barrier</h2>
-              <p className="font-garamond text-xl text-[#9d8f73] leading-loose">
+              <h2 className="home-section-heading font-garamond">Breaking The Barrier</h2>
+              <p className="home-section-body font-garamond">
                 Just as the Tower of Babel scattered languages across the earth, we strive to reunite them. Our platform serves as the modern interpreter, dissolving boundaries between cultures through precise, context-aware translation.
               </p>
             </div>
-            <div className="flex-1 relative group">
-              <div className="absolute inset-0 bg-[#cba164] blur-[60px] opacity-10 group-hover:opacity-20 transition-opacity duration-1000"></div>
-              <div className="relative border border-[#e2dcc8]/10 bg-[#1a1814]/60 backdrop-blur-sm p-8 rounded-sm shadow-2xl transform transition hover:-translate-y-2 duration-500">
-                <h3 className="font-cinzel text-2xl mb-4 text-[#e2dcc8]">Universal Access</h3>
-                <p className="font-garamond text-lg text-gray-400">
+            <div className="home-section-card home-card-gold">
+              <div className="home-card">
+                <h3 className="home-card-title font-cinzel">Universal Access</h3>
+                <p className="home-card-text font-garamond">
                    Upload EPUBs, PDFs, or Documents. Watch as the ancient barriers crumble, replaced by seamless understanding across English, Chinese, and Spanish.
                 </p>
               </div>
@@ -222,48 +214,46 @@ const HomePage = () => {
           </section>
 
           {/* Section 2 */}
-          <section className="flex flex-col md:flex-row-reverse items-center gap-12 animate-fade-in-up delay-700">
-             <div className="flex-1 space-y-6">
-              <div className="flex items-center justify-end gap-3 text-[#cba164] mb-2">
-                <span className="font-cinzel text-sm tracking-widest">THE ENGINE</span>
-                <Cpu className="w-6 h-6" />
+          <section className="home-section reverse animate-fade-in-up delay-700">
+             <div className="home-section-text">
+              <div className="home-eyebrow right">
+                <span className="font-cinzel">THE ENGINE</span>
+                <Cpu className="home-eyebrow-icon" />
               </div>
-              <h2 className="text-4xl font-garamond font-bold text-white text-right">Powered by Intellect</h2>
-              <p className="font-garamond text-xl text-[#9d8f73] leading-loose text-right">
+              <h2 className="home-section-heading font-garamond home-text-right">Powered by Intellect</h2>
+              <p className="home-section-body font-garamond home-text-right">
                 Beneath the classical facade lies the pulse of modern Large Language Models. We don't just translate words; we interpret meaning, tone, and nuance, preserving the soul of the original text.
               </p>
             </div>
-            <div className="flex-1 relative group">
-              <div className="absolute inset-0 bg-[#64cbbf] blur-[60px] opacity-5 group-hover:opacity-15 transition-opacity duration-1000"></div>
-              <div className="relative border border-[#e2dcc8]/10 bg-[#1a1814]/60 backdrop-blur-sm p-8 rounded-sm shadow-2xl transform transition hover:-translate-y-2 duration-500">
-                 <h3 className="font-cinzel text-2xl mb-4 text-[#e2dcc8] text-right">Cognitive Processing</h3>
-                 <p className="font-garamond text-lg text-gray-400 text-right">
+            <div className="home-section-card home-card-teal">
+              <div className="home-card right">
+                 <h3 className="home-card-title font-cinzel">Cognitive Processing</h3>
+                 <p className="home-card-text font-garamond">
                    Utilizing GPT-4o and advanced context retention algorithms to ensure consistency across long-form narratives and technical documents.
-                </p>
+                 </p>
               </div>
             </div>
           </section>
 
           {/* Section 3 */}
-          <section className="flex flex-col md:flex-row items-center gap-12 animate-fade-in-up delay-900">
-            <div className="flex-1 space-y-6">
-              <div className="flex items-center gap-3 text-[#cba164] mb-2">
-                <Feather className="w-6 h-6" />
-                <span className="font-cinzel text-sm tracking-widest">THE CRAFT</span>
+          <section className="home-section animate-fade-in-up delay-900">
+            <div className="home-section-text">
+              <div className="home-eyebrow">
+                <Feather className="home-eyebrow-icon" />
+                <span className="font-cinzel">THE CRAFT</span>
               </div>
-              <h2 className="text-4xl font-garamond font-bold text-white">Elegance in Form</h2>
-              <p className="font-garamond text-xl text-[#9d8f73] leading-loose">
+              <h2 className="home-section-heading font-garamond">Elegance in Form</h2>
+              <p className="home-section-body font-garamond">
                 Functionality need not sacrifice beauty. Our interface is designed to evoke the tranquility of a study, allowing you to focus on the text without distraction.
               </p>
             </div>
-             <div className="flex-1 relative group">
-               <div className="absolute inset-0 bg-[#cb6464] blur-[60px] opacity-10 group-hover:opacity-20 transition-opacity duration-1000"></div>
-               <div className="relative border border-[#e2dcc8]/10 bg-[#1a1814]/60 backdrop-blur-sm p-8 rounded-sm shadow-2xl transform transition hover:-translate-y-2 duration-500">
-                 <h3 className="font-cinzel text-2xl mb-4 text-[#e2dcc8]">Seamless UX</h3>
-                 <p className="font-garamond text-lg text-gray-400">
+             <div className="home-section-card home-card-crimson">
+               <div className="home-card">
+                 <h3 className="home-card-title font-cinzel">Seamless UX</h3>
+                 <p className="home-card-text font-garamond">
                    Drag-and-drop simplicity met with instant visual feedback. A blend of classical aesthetics and modern responsiveness.
-                </p>
-              </div>
+                 </p>
+               </div>
             </div>
           </section>
         </div>

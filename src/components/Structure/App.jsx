@@ -3,7 +3,6 @@ import { HashRouter, Route, Routes } from "react-router-dom";
 import Cover from "../cover_UI/Cover.jsx";
 import Layout from "./Layout.jsx";
 import HomePgae from "../Pages/HomePgae.jsx";
-import "./layout.css";
 
 export default function App() {
   const [introComplete, setIntroComplete] = useState(false);

@@ -229,7 +229,7 @@ const HomePage = () => {
               <div className="home-card right">
                  <h3 className="home-card-title font-cinzel">Cognitive Processing</h3>
                  <p className="home-card-text font-garamond">
-                   Utilizing GPT-4o and advanced context retention algorithms to ensure consistency across long-form narratives and technical documents.
+                   Utilizing LLM and advanced context retention algorithms to ensure consistency across long-form narratives and technical documents.
                  </p>
               </div>
             </div>

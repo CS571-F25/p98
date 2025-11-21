@@ -8,7 +8,6 @@ const TranslationPage = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const fileInputRef = useRef(null);
 
-  // 表单状态
   const [formData, setFormData] = useState({
     apiKey: "",
     fileType: "epub",
@@ -17,7 +16,6 @@ const TranslationPage = () => {
     model: "gpt-4o"
   });
 
-  // --- 交互逻辑 ---
   const handleDragOver = (e) => { e.preventDefault(); setIsDragging(true); };
   const handleDragLeave = (e) => { e.preventDefault(); setIsDragging(false); };
   const handleDrop = (e) => {
@@ -36,7 +34,6 @@ const TranslationPage = () => {
   const handleTranslate = () => {
     if (!file || !formData.apiKey) return;
     setIsProcessing(true);
-    // 模拟处理过程
     setTimeout(() => {
       setIsProcessing(false);
       alert("Translation simulation complete!");
@@ -47,7 +44,7 @@ const TranslationPage = () => {
     <div className="translate-root">
       <div className="translate-shell">
         <header className="translate-header">
-          <h1 className="translate-title font-cinzel">THE INTERPRETER</h1>
+          <h1 className="translate-title font-cinzel">TRANSLATE</h1>
           <p className="translate-subtitle">
             "Bridging worlds, one document at a time."
           </p>

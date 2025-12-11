@@ -12,6 +12,7 @@ const TranslationPage = () => {
   const [glossaryReady, setGlossaryReady] = useState(false);
   const [editableGlossary, setEditableGlossary] = useState([]);
   const [showMetaForm, setShowMetaForm] = useState(false);
+  const [translateProgress, setTranslateProgress] = useState(null);
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -48,6 +49,11 @@ const TranslationPage = () => {
       return
     }
     setIsProcessing(true)
+    if (glossaryReady) {
+      setTranslateProgress(0)
+    } else {
+      setTranslateProgress(null)
+    }
     if (formData.fileType === "epub"){
       await EpubProcessor(file, {
         apiKey: formData.apiKey,
@@ -58,7 +64,12 @@ const TranslationPage = () => {
         author: formData.author,
         domain: formData.domain,
         glossaryOnly: !glossaryReady,
-        overrideGlossary: glossaryReady ? editableGlossary : null
+        overrideGlossary: glossaryReady ? editableGlossary : null,
+        onProgress: glossaryReady ? (done, total) => {
+          if (total > 0) {
+            setTranslateProgress(Math.min(100, ((done / total) * 100)));
+          }
+        } : undefined
       }).then((res) => {
         if (!glossaryReady && res?.detailedGlossary) {
           const sorted = [...res.detailedGlossary].sort((a, b) => (b.count || 0) - (a.count || 0))
@@ -68,6 +79,7 @@ const TranslationPage = () => {
       })
     }
     setIsProcessing(false)
+    setTranslateProgress(null)
   }
 
   return (
@@ -265,6 +277,13 @@ const TranslationPage = () => {
                 </>
               )}
             </button>
+            {translateProgress !== null && (
+              <div className="translate-progress">
+                <div className="translate-progress-bar" style={{ width: `${translateProgress}%` }} />
+                <span className="translate-progress-text">{translateProgress.toFixed(1)}%</span>
+              </div>
+            )}
+
             {glossaryReady && (
               <div className="translate-panel" style={{ marginTop: "1rem" }}>
                 <div className="translate-panel-heading">

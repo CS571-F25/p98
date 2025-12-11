@@ -11,7 +11,7 @@ const MAX_CONCURRENCY =20
 export default async function EpubProcessor(file, options = {}){
     try{
         console.log("Starting resolve Epub...");
-        const { sourceLang = "en", targetLang = "zh", apiKey = "", bookTitle = "", author = "", domain = "", model = "deepseek-chat", glossaryOnly = false, overrideGlossary = null } = options
+        const { sourceLang = "en", targetLang = "zh", apiKey = "", bookTitle = "", author = "", domain = "", model = "deepseek-chat", glossaryOnly = false, overrideGlossary = null, onProgress = undefined } = options
 
         const arrayBuffer = await file.arrayBuffer()
         const zip = await JSZip.loadAsync(arrayBuffer)
@@ -79,14 +79,33 @@ export default async function EpubProcessor(file, options = {}){
         if (glossaryOnly) {
             return { detailedGlossary: glossary.detailedGlossary }
         }
-        
-        
+
+        // 预计算所有 chunk 数量用于进度条
+        const MAX_TOKENS = 1200
+        let totalChunks = 0
+        sections.forEach(({ textNodes }) => {
+            let currentTokens = 0
+            let currentSize = 0
+            textNodes.forEach(node => {
+                const tokens = encode(node.textContent).length
+                const willExceed = currentTokens + tokens > MAX_TOKENS
+                if (willExceed && currentSize > 0) {
+                    totalChunks += 1
+                    currentTokens = 0
+                    currentSize = 0
+                }
+                currentTokens += tokens
+                currentSize += 1
+            })
+            if (currentSize > 0) totalChunks += 1
+        })
+        let completedChunks = 0
+
         // --- 第三阶段：分块翻译与回填，并写回 ZIP ---
         for (let sIdx = 0; sIdx < sections.length; sIdx++){
             const { doc, textNodes, zipFilePath } = sections[sIdx]
             console.log(`Preparing chunks for section ${sIdx + 1}/${sections.length}: ${zipFilePath}`);
 
-            const MAX_TOKENS = 1200
             let chunkStartIndex = 0
             let currentChunk = []
             let currentTokenCount = 0
@@ -126,6 +145,10 @@ export default async function EpubProcessor(file, options = {}){
             let finished = 0
             const wrappedTasks = tasks.map((task, idx) => async () => {
                 const res = await task()
+                completedChunks += 1
+                if (onProgress && totalChunks > 0) {
+                    onProgress(completedChunks, totalChunks)
+                }
                 finished += 1
                 const percent = ((finished / tasks.length) * 100).toFixed(1)
                 console.log(`Section ${sIdx + 1}: chunk ${idx + 1}/${tasks.length} done (${percent}%)`)

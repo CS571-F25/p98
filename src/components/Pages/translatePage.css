@@ -110,6 +110,30 @@
   cursor: pointer;
 }
 
+.translate-progress {
+  position: relative;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(203,161,100,0.3);
+  border-radius: 6px;
+  height: 12px;
+  overflow: hidden;
+  margin-top: 0.5rem;
+}
+
+.translate-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, rgba(203,161,100,0.6), rgba(255,248,231,0.8));
+  transition: width 0.2s ease;
+}
+
+.translate-progress-text {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.9rem;
+  color: #cba164;
+  text-align: right;
+}
+
 .translate-actions {
   display: flex;
   flex-direction: column;

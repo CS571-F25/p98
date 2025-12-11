@@ -33,7 +33,7 @@ export default async function LLM_Request(textChunks, termTable, mode = "text", 
       const systemPrompt = buildGlossaryPrompt(sourceLang, targetLang, bookTitle, author, domain, presetPrompt);
       const userPrompt = JSON.stringify(termList);
 
-      console.log("🚀 [Glossary] Sending request to LLM...");
+      console.log(`🚀 [Glossary] Sending request to ${baseURL} with author="${author}", book="${bookTitle}", domain="${domain}"`);
 
       try {
         const completion = await sendWithRetry(() => openai.chat.completions.create({

@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import { UploadCloud, FileText, Languages, Key, ArrowRight, X, Loader2 } from "lucide-react";
 import "./translatePage.css"
 import EpubProcessor from "../fileProcessing/EpubProcessor"
+import PDFProcessor from "../fileProcessing/PDFProcessor"
 import { useNavigate } from "react-router-dom";
 
 const TranslationPage = () => {
@@ -13,6 +14,7 @@ const TranslationPage = () => {
   const [editableGlossary, setEditableGlossary] = useState([]);
   const [showMetaForm, setShowMetaForm] = useState(false);
   const [translateProgress, setTranslateProgress] = useState(null);
+  const [useGlossary, setUseGlossary] = useState(true);
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -63,7 +65,8 @@ const TranslationPage = () => {
         bookTitle: formData.bookTitle,
         author: formData.author,
         domain: formData.domain,
-        glossaryOnly: !glossaryReady,
+        useGlossary,
+        glossaryOnly: useGlossary ? !glossaryReady : false,
         overrideGlossary: glossaryReady ? editableGlossary : null,
         onProgress: glossaryReady ? (done, total) => {
           if (total > 0) {
@@ -71,7 +74,31 @@ const TranslationPage = () => {
           }
         } : undefined
       }).then((res) => {
-        if (!glossaryReady && res?.detailedGlossary) {
+        if (useGlossary && !glossaryReady && res?.detailedGlossary) {
+          const sorted = [...res.detailedGlossary].sort((a, b) => (b.count || 0) - (a.count || 0))
+          setEditableGlossary(sorted)
+          setGlossaryReady(true)
+        }
+      })
+    } else if (formData.fileType === "pdf") {
+      await PDFProcessor(file, {
+        apiKey: formData.apiKey,
+        sourceLang: formData.sourceLang,
+        targetLang: formData.targetLang,
+        model: formData.model,
+        bookTitle: formData.bookTitle,
+        author: formData.author,
+        domain: formData.domain,
+        useGlossary,
+        glossaryOnly: useGlossary ? !glossaryReady : false,
+        overrideGlossary: glossaryReady ? editableGlossary : null,
+        onProgress: glossaryReady ? (done, total) => {
+          if (total > 0) {
+            setTranslateProgress(Math.min(100, ((done / total) * 100)));
+          }
+        } : undefined
+      }).then((res) => {
+        if (useGlossary && !glossaryReady && res?.detailedGlossary) {
           const sorted = [...res.detailedGlossary].sort((a, b) => (b.count || 0) - (a.count || 0))
           setEditableGlossary(sorted)
           setGlossaryReady(true)
@@ -127,8 +154,23 @@ const TranslationPage = () => {
                 >
                   <option value="deepseek-chat">deepseek-chat(Recommended)</option>
                   <option value="gpt-5-mini">gpt-5-mini</option>
+                  <option value="gpt-5.1">gpt-5.1</option>
                 </select>
               </div>
+              <label className="translate-checkbox">
+                <input
+                  type="checkbox"
+                  checked={useGlossary}
+                  onChange={(e) => {
+                    setUseGlossary(e.target.checked)
+                    if (!e.target.checked) {
+                      setGlossaryReady(false)
+                      setEditableGlossary([])
+                    }
+                  }}
+                />
+                Use terminology glossary
+              </label>
             </div>
 
             <div className="translate-panel">
@@ -292,41 +334,43 @@ const TranslationPage = () => {
                 </div>
                 <p className="translate-dropzone-note">Edit translations, remove rows, or add new terms before final translation.</p>
                 <div className="glossary-editor">
-                  {editableGlossary.map((item, idx) => (
-                    <div className="glossary-row" key={`${item.term}-${idx}`}>
-                      <input
-                        className="translate-input"
-                        value={item.term}
-                        onChange={(e) => {
-                          const next = [...editableGlossary];
-                          next[idx] = { ...next[idx], term: e.target.value };
-                          setEditableGlossary(next);
-                        }}
-                        placeholder="Term"
-                      />
-                      <input
-                        className="translate-input"
-                        value={item.translation || ""}
-                        onChange={(e) => {
-                          const next = [...editableGlossary];
-                          next[idx] = { ...next[idx], translation: e.target.value };
-                          setEditableGlossary(next);
-                        }}
-                        placeholder="Translation"
-                      />
-                      <span className="translate-count-pill">freq: {item.count ?? 0}</span>
-                      <button
-                        type="button"
-                        className="translate-remove-button"
-                        onClick={() => {
-                          const next = editableGlossary.filter((_, i) => i !== idx);
-                          setEditableGlossary(next);
-                        }}
-                      >
-                        <X size={14} /> Remove
-                      </button>
-                    </div>
-                  ))}
+                    {editableGlossary.map((item, idx) => (
+                      <div className="glossary-row" key={`${item.term}-${idx}`}>
+                        <input
+                          className="translate-input"
+                          value={item.term}
+                          onChange={(e) => {
+                            const next = [...editableGlossary];
+                            next[idx] = { ...next[idx], term: e.target.value };
+                            setEditableGlossary(next);
+                          }}
+                          placeholder="Term"
+                        />
+                        <input
+                          className="translate-input"
+                          value={item.translation || ""}
+                          onChange={(e) => {
+                            const next = [...editableGlossary];
+                            next[idx] = { ...next[idx], translation: e.target.value };
+                            setEditableGlossary(next);
+                          }}
+                          placeholder="Translation"
+                        />
+                        <span className="translate-count-pill">freq: {item.count ?? 0}</span>
+                        <div className="glossary-row-actions">
+                          <button
+                            type="button"
+                            className="translate-remove-button"
+                            onClick={() => {
+                              const next = editableGlossary.filter((_, i) => i !== idx);
+                              setEditableGlossary(next);
+                            }}
+                          >
+                            <X size={14} /> Remove
+                          </button>
+                        </div>
+                      </div>
+                    ))}
                   <button
                     type="button"
                     className="translate-format-button"

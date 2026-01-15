@@ -24,7 +24,7 @@ const featuresData = [
     icon: <Layers size={32} />,
     title: "Context-Aware Chunks",
     subtitle: "The Sliding Window Protocol",
-    body: "Standard APIs have amnesia. We solve this by implementing a token-based sliding window. We feed the trailing 500 tokens of the previous chunk into the next request, creating a chain of context. This ensures that narrative arcs, character pronouns, and subtle tonal shifts remain unbroken across chapter boundaries, rather than drifting into generic machine prose.",
+    body: "Standard APIs have amnesia. We solve this by implementing a token-based sliding window. We feed the trailing 1200 tokens of the previous chunk into the next request, creating a chain of context. This ensures that narrative arcs, character pronouns, and subtle tonal shifts remain unbroken across chapter boundaries, rather than drifting into generic machine prose.",
     className: "feature-wide",
     techSpec: "TOKEN_OVERLAP: 1200"
   },

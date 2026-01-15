@@ -11,7 +11,7 @@ const MAX_CONCURRENCY =20
 export default async function EpubProcessor(file, options = {}){
     try{
         console.log("Starting resolve Epub...");
-        const { sourceLang = "en", targetLang = "zh", apiKey = "", bookTitle = "", author = "", domain = "", model = "deepseek-chat", glossaryOnly = false, overrideGlossary = null, onProgress = undefined } = options
+        const { sourceLang = "en", targetLang = "zh", apiKey = "", bookTitle = "", author = "", domain = "", model = "deepseek-chat", glossaryOnly = false, overrideGlossary = null, useGlossary = true, onProgress = undefined } = options
 
         const arrayBuffer = await file.arrayBuffer()
         const zip = await JSZip.loadAsync(arrayBuffer)
@@ -65,19 +65,24 @@ export default async function EpubProcessor(file, options = {}){
         }
 
         // --- 第二阶段：生成术语表 ---
-        const fullPlainText = allBookText.join("\n")
-        console.log("Generating termTable...")
-        let termTable = await generateTermTable(fullPlainText, { topN: 150, minFreq: 3, language: sourceLang })
-        const glossary = await translateGlossary(termTable, { sourceLang, targetLang, apiKey, bookTitle, author, domain, model })
-        let translationGlossary = glossary.simpleGlossary
-        if (overrideGlossary && Array.isArray(overrideGlossary) && overrideGlossary.length > 0) {
-            translationGlossary = overrideGlossary.map(item => ({ term: item.term, translation: item.translation || "" }))
-            console.log("using user-edited glossary:", translationGlossary)
-        }
-        termTable = translationGlossary
-        console.log("successfully generated termTable:", termTable)
-        if (glossaryOnly) {
-            return { detailedGlossary: glossary.detailedGlossary }
+        let termTable = []
+        if (useGlossary) {
+            const fullPlainText = allBookText.join("\n")
+            console.log("Generating termTable...")
+            termTable = await generateTermTable(fullPlainText, { topN: 150, minFreq: 3, language: sourceLang })
+            const glossary = await translateGlossary(termTable, { sourceLang, targetLang, apiKey, bookTitle, author, domain, model })
+            let translationGlossary = glossary.simpleGlossary
+            if (overrideGlossary && Array.isArray(overrideGlossary) && overrideGlossary.length > 0) {
+                translationGlossary = overrideGlossary.map(item => ({ term: item.term, translation: item.translation || "" }))
+                console.log("using user-edited glossary:", translationGlossary)
+            }
+            termTable = translationGlossary
+            console.log("successfully generated termTable:", termTable)
+            if (glossaryOnly) {
+                return { detailedGlossary: glossary.detailedGlossary }
+            }
+        } else {
+            console.log("Skipping glossary generation as requested")
         }
 
         // 预计算所有 chunk 数量用于进度条

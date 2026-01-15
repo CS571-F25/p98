@@ -7,7 +7,8 @@ const STOP_WORDS = {
   fr: new Set([
     "a","à","ai","aie","aient","aies","ait","alors","as","au","aucun","aurai","auraient","aurais","aurait","auras","aurez","auriez","aurions","aurons","auront","aussi","autre","aux","avaient","avais","avait","avant","avec","avez","aviez","avions","avoir","avons","ayant","bon","car","ce","ceci","cela","ces","cet","cette","ceux","chaque","ci","comme","comment","d","dans","de","dedans","dehors","depuis","derrière","des","desquelles","desquels","dessous","dessus","deux","devant","devra","doit","donc","dont","du","duquel","durant","elle","elles","en","encore","entre","envers","es","est","et","étaient","étais","était","étant","étions","être","eu","eue","eues","eurent","eus","eusse","eussent","eusses","eussiez","eussions","eut","eux","faire","fais","faisaient","faisant","fait","faites","fois","font","furent","fus","fusse","fussent","fusses","fussiez","fussions","fut","haut","hors","ici","il","ils","j","je","juste","l","la","le","les","leur","leurs","lui","ma","maintenant","mais","me","même","mes","mien","mieux","moi","moins","mon","n","ne","ni","nos","notre","nous","on","ont","ou","où","par","parce","pas","peut","peu","pour","pourquoi","qu","quand","que","quel","quelle","quelles","quels","qui","sa","sans","se","sera","serai","seraient","serais","serait","seras","serez","seriez","serions","serons","seront","ses","si","sien","soi","soient","sois","soit","sommes","son","sont","sous","suis","sur","ta","tandis","te","tel","telle","telles","tels","tes","toi","ton","tous","tout","toute","toutes","très","tu","un","une","vers","voient","vont","vos","votre","vous","y"
   ])
-};
+}
+
 
 /**
  * 翻译术语表：
@@ -22,8 +23,8 @@ export default async function translateGlossary(termTable, options = {}) {
     return { simpleGlossary: [], translatedGlossary: [], detailedGlossary: [] };
   }
 
-  const lang = (options.sourceLang || "en").toLowerCase() === "fr" ? "fr" : "en";
-  const stopWords = STOP_WORDS[lang] || STOP_WORDS.en;
+  const lang = (options.sourceLang || "en").toLowerCase()
+  const stopWords = STOP_WORDS[lang] ?? new Set()
 
   // 清洗 + 去重，同时保留原始统计字段（count/score 等）
   const seen = new Set()

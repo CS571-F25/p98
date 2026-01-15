@@ -2,7 +2,7 @@ import OpenAI from "openai";
 const MAX_RETRIES = 3
 const BASE_DELAY_MS = 200
 const REQUEST_TIMEOUT_MS_DS = 60000
-const REQUEST_TIMEOUT_MS_GPT = 150000
+const REQUEST_TIMEOUT_MS_GPT = 180000
 
 export default async function LLM_Request(textChunks, termTable, mode = "text", context = "", options = {}){
   const sourceLang = options.sourceLang
@@ -83,6 +83,16 @@ export default async function LLM_Request(textChunks, termTable, mode = "text", 
         return textChunks
       }catch(parseErr){
         console.error("❌ [Text] JSON parse failed:", parseErr)
+        // 宽容解析：尝试提取 translations 数组
+        const match = rawContent && rawContent.match(/\"translations\"\s*:\s*(\[[\s\S]*?\])/)
+        if (match) {
+          try {
+            const arr = JSON.parse(match[1])
+            if (Array.isArray(arr)) return arr
+          } catch (e) {
+            console.warn("Fallback parse failed, returning source text")
+          }
+        }
         return textChunks
       }
     }catch(err){
@@ -92,16 +102,14 @@ export default async function LLM_Request(textChunks, termTable, mode = "text", 
   }
 
   /**
-   * 构建用于生成术语表的 System Prompt
    * @param {string} sourceLang - 原文语言
    * @param {string} targetLang - 目标语言
    * @param {string} bookTitle - 书名
    * @param {string} author - 作者
-   * @param {string} domain - 领域 (e.g., "Philosophy", "Fantasy Novel")
-   * @param {string} presetPrompt -在prompt前的prompt，可以用来处理一些特殊情况，默认为空
+   * @param {string} domain - 领域 (Philosophy)
    */
-  function buildGlossaryPrompt(sourceLang, targetLang ,bookTitle, author, domain, presetPrompt) {
-      return `${presetPrompt}\nYou are an expert terminologist and translator specializing in **${domain}**. 
+  function buildGlossaryPrompt(sourceLang, targetLang ,bookTitle, author, domain) {
+      return `You are an expert terminologist and translator specializing in **${domain}**. 
   Your task is to translate a list of extracted terms from ${sourceLang} to ${targetLang} for the book **"${bookTitle}"** by **${author}**.
 
   ### 1. Contextual Knowledge Retrieval (CRITICAL)

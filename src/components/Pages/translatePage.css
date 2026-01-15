@@ -203,6 +203,21 @@
   margin-top: 0.5rem;
 }
 
+.glossary-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.glossary-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto auto;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid rgba(226, 220, 200, 0.08);
+}
+
 .translate-upload-info {
   animation: fadeIn 0.5s ease;
 }
@@ -213,17 +228,26 @@
 }
 
 .translate-remove-button {
-  margin-top: 1rem;
   background: transparent;
-  border: none;
+  border: 1px solid rgba(226, 220, 200, 0.2);
   color: #cba164;
   cursor: pointer;
-  font-size: 0.9rem;
-  display: flex;
+  font-size: 0.85rem;
+  display: inline-flex;
   align-items: center;
   gap: 0.25rem;
-  margin-left: auto;
-  margin-right: auto;
+  padding: 0.35rem 0.75rem;
+  border-radius: 4px;
+}
+
+.translate-remove-button:hover {
+  border-color: #cba164;
+  transform: translateY(-1px);
+}
+
+.glossary-row-actions {
+  display: flex;
+  justify-content: flex-start;
 }
 
 .translate-format-controls {
@@ -256,6 +280,14 @@
 
 .translate-format-button.active {
   border-color: #cba164;
+  color: #cba164;
+}
+
+.translate-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
   color: #cba164;
 }
 
